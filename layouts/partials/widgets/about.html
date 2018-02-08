@@ -41,11 +41,25 @@
       <ul class="network-icon" aria-hidden="true">
         {{ range $.Site.Params.social }}
         {{ $pack := or .icon_pack "fa" }}
-        <li>
-          <a itemprop="sameAs" href="{{ .link | safeURL }}" target="_blank" rel="noopener">
-            <i class="{{ $pack }} {{ $pack }}-{{ .icon }} big-icon"></i>
-          </a>
-        </li>
+          <li>
+
+            {{ if .obfuscate }}
+              {{ $mailSplitted := split .link "" }}
+              <script>
+                document.write("<a itemprop='sameAs' target='_blank' rel='noopener' href='");
+                
+                {{ range $char := $mailSplitted }}
+                  document.write('{{ $char }}');
+                {{ end }}
+                document.write("' >");
+              </script>
+            {{ else }}
+              <a itemprop='sameAs' href='{{ .link | safeURL }}' target='_blank' rel='noopener'>
+            {{ end }}
+
+              <i class="{{ $pack }} {{ $pack }}-{{ .icon }} big-icon"></i>
+            </a>
+          </li>
         {{ end }}
       </ul>
 
